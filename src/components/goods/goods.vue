@@ -1,4 +1,5 @@
 <template>
+<div>
   <div class="goods">
     <div class="menu-wrapper" ref="menuWrapper">
     	<ul>
@@ -14,7 +15,7 @@
     		<li v-for="item in goods" class="food-list food-list-hook">
     			<h1 class="title">{{item.name}}</h1>
     			<ul>
-    				<li v-for="food in item.foods" class="food-item border-1px">
+    				<li @click="selectFood(food,$event)" v-for="food in item.foods" class="food-item border-1px">
     					<div class="icon">
     						<img width="57" height="57" :src="food.icon">
     					</div>
@@ -29,7 +30,7 @@
     							<span v-show="food.oldPrice" class="old">￥{{food.oldPrice}}</span>
     						</div>
                 <div class="cartcontrol-wrapper">
-                  <cartcontrol :food="food" v-on:cart-add="cartAdd">
+                  <cartcontrol :food="food" v-on:cart-add="cartAdd" >
                   </cartcontrol>
                 </div>
     					</div>
@@ -40,12 +41,16 @@
     </div>
     <shopcart ref="shopcart" :select-foods="selectFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
   </div>
+  <food :food="selectedFood" ref="food"></food>
+
+  </div>
 </template>
 
 <script type="text/ecmascript-6">
 import BScroll from 'better-scroll';
 import shopcart from '../shopcart/shopcart.vue';
 import cartcontrol from '../cartcontrol/cartcontrol.vue';
+import food from '../food/food.vue';
 
 const ERR_OK = 0
 
@@ -59,7 +64,8 @@ export default {
     return {
      goods:[],
      listHeight:[],
-     scrollY:0
+     scrollY:0,
+     selectedFood:{}
     };
   },
   computed:{
@@ -141,11 +147,19 @@ export default {
       this.$nextTick(()=>{
         this.$refs.shopcart.drop(el);
       })
+    },
+    selectFood(food,event) {
+      if(!event._constructed){//默认派发的事件的时候，这个_constructed就是true。而浏览器的原生则是没有_constructed这个属性的。也就是当我们在平常检测到这个属性的时候，就把他return掉，不执行。
+        return;
+     }
+     this.selectedFood=food;
+     this.$refs.food.show();
     }
   },
   components:{
     shopcart,
-    cartcontrol
+    cartcontrol,
+    food
   },
   // events:{
   //   'cart.add' (target) {
