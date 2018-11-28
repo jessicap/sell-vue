@@ -4,22 +4,25 @@
    <v-header :seller="seller"></v-header>
      <div class="tab border-1px">
      <div class="tab-item"><router-link :to="{name:'goods'}">商品</router-link></div>
-     <div class="tab-item"><router-link :to="{name:'rating'}">详情</router-link></div>
+     <div class="tab-item"><router-link :to="{name:'rating'}">评论</router-link></div>
      <div class="tab-item"><router-link :to="{name:'seller'}">商家</router-link></div>
     </div>
-     <router-view :seller="seller"></router-view>
+    <keep-alive>
+      <router-view :seller="seller" ></router-view>
+    </keep-alive>
+     
     </div>
 </template>
 
 <script>
   import header from './components/header/header.vue';
-
+  import {urlParse} from './common/js/util.js';
   const ERR_OK = 0;
 
   export default{
       data() {
         return {
-          seller: {}
+          seller:{}
         };
       },
       created() {

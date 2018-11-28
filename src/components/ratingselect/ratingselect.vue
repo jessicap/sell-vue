@@ -67,6 +67,7 @@ export default{
    		}
    		this.selectType=type
    		this.$emit('select',type) //子组件通过事件告诉父组件 参数
+      this.$emit('increment','selectType',type)
    	},
    	toggleContent(event){
    		if(!event._constructed){
@@ -74,6 +75,7 @@ export default{
    		}
    		this.onlyContent= !this.onlyContent
    		this.$emit('toggle')
+      this.$emit('increment','onlyContent',onlyContent)
    	}
    }
 };
